@@ -1,5 +1,6 @@
 package dev.sasikumar.billingapplication.models;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,8 +12,14 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "receipts")
 public class Receipt {
+    @Id
+    @GeneratedValue(strategy =  GenerationType.AUTO)
     private Integer Id;
+
+    @ManyToOne
     private Customer customer;
     private LocalDate date;
     private Integer amount;

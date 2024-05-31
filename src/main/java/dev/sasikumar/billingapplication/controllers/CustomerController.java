@@ -24,7 +24,7 @@ public class CustomerController {
         return customerService.getCustomer(businessName);
     }
 
-    @PostMapping("/")
+    @PutMapping("/")
     public Customer updateCustomer(@RequestBody CustomerDto customerDto) {
         return customerService.updateCustomer(customerDto);
     }

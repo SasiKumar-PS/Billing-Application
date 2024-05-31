@@ -2,10 +2,7 @@ package dev.sasikumar.billingapplication.controllers;
 
 import dev.sasikumar.billingapplication.DTOs.BillDto;
 import dev.sasikumar.billingapplication.DTOs.ProductDto;
-import dev.sasikumar.billingapplication.Enums.ProductType;
 import dev.sasikumar.billingapplication.models.Bill;
-import dev.sasikumar.billingapplication.models.Customer;
-import dev.sasikumar.billingapplication.models.Product;
 import dev.sasikumar.billingapplication.services.BillService;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,11 +41,9 @@ public class BillController {
     }
 
     @PutMapping("/{name}/{date}")
-    public Bill updateBill (@PathVariable("name") String businessName,
-                           @PathVariable("date") String date) {
+    public Bill updateBill (@RequestBody BillDto billDto) {
 
-        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
-        return billService.updateBill(businessName, localDate);
+        return billService.updateBill(billDto);
     }
 
     @DeleteMapping("/{name}/{date}")
@@ -56,6 +51,6 @@ public class BillController {
                            @PathVariable("date") String date) {
 
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
-        return businessName + "'s Bill in date: " + localDate + " is deleted";
+        return billService.deleteBill(businessName, localDate);
     }
 }
