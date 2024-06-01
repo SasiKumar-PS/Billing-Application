@@ -23,4 +23,5 @@ public class Receipt {
     private Customer customer;
     private LocalDate date;
     private Integer amount;
+    // private Integer discount;    while we shouldn't update the discount
 }

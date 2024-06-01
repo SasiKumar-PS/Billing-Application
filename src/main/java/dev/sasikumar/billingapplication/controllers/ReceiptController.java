@@ -12,15 +12,15 @@ import java.time.format.DateTimeFormatter;
 @RequestMapping("/receipt")
 public class ReceiptController {
 
-    private ReceiptService receiptService;
+    private final ReceiptService receiptService;
 
     public ReceiptController(ReceiptService receiptService) {
         this.receiptService = receiptService;
     }
 
     @PostMapping("/")
-    public Receipt createReceipt(@RequestBody ReceiptDto createReceiptDto) {
-        return receiptService.createReceipt(createReceiptDto);
+    public Receipt createReceipt(@RequestBody ReceiptDto receiptDto) {
+        return receiptService.createReceipt(receiptDto);
     }
 
     @GetMapping("/{name}/{date}")
@@ -31,12 +31,9 @@ public class ReceiptController {
         return receiptService.getReceipt(businessName, localDate);
     }
 
-    @PutMapping("/{name}/{date}")
-    public Receipt updateReceipt(@PathVariable("name") String businessName,
-                                 @PathVariable("date") String date) {
-
-        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
-        return receiptService.updateReceipt(businessName, localDate);
+    @PutMapping("/")
+    public Receipt updateReceipt(@RequestBody ReceiptDto receiptDto) {
+        return receiptService.updateReceipt(receiptDto);
     }
 
     @DeleteMapping("/{name}/{date}")

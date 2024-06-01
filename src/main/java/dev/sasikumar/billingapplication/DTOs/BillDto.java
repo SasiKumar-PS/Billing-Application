@@ -1,6 +1,5 @@
 package dev.sasikumar.billingapplication.DTOs;
 
-import dev.sasikumar.billingapplication.models.Product;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,9 +9,9 @@ import java.util.List;
 @Getter
 @Setter
 public class BillDto {
-    private Integer id;
+    private Integer billId;
     private String businessName;
     private LocalDate date;
-    private List<Product> products;
+    private List<ProductDto> products;     // need to make List<ProductDto>
     private int amount;
 }

@@ -11,13 +11,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "products")
+@Embeddable
 public class Product {
-    @Id
-    @GeneratedValue(strategy =  GenerationType.AUTO)
-    private Integer id;
-
     private String name;
     private ProductType productType;     //Enum (BAG, Weight)
     private int quantity;

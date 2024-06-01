@@ -8,6 +8,6 @@ import java.time.LocalDate;
 public interface ReceiptService {
     Receipt createReceipt(ReceiptDto createReceiptDto);
     Receipt getReceipt(String businessName, LocalDate date);
-    Receipt updateReceipt(String businessName, LocalDate date);
+    Receipt updateReceipt(ReceiptDto receiptDto);
     String deleteReceipt(String businessName, LocalDate date);
 }

@@ -2,6 +2,7 @@ package dev.sasikumar.billingapplication.services.Impl;
 
 import dev.sasikumar.billingapplication.DTOs.BillDto;
 import dev.sasikumar.billingapplication.Enums.ProductType;
+import dev.sasikumar.billingapplication.converter.BillConverter;
 import dev.sasikumar.billingapplication.models.Bill;
 import dev.sasikumar.billingapplication.models.Customer;
 import dev.sasikumar.billingapplication.models.Product;
@@ -25,16 +26,14 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public Bill createBill(BillDto billDto) {
-        Bill bill = new Bill();
+        Bill bill = BillConverter.toBill(billDto);
 
         Customer customer = customerService.getCustomer(billDto.getBusinessName());
-        if(customer == null) throw new RuntimeException("customer business name is invalid \n 1. please check the business name and try again! \n2. Create a customer and then try saving the bill with this customer");
+        if(customer == null) throw new IllegalArgumentException("customer business name is invalid \n 1. please check the business name and try again! \n 2. Create a customer and then try saving the bill with this customer");
 
         bill.setCustomer(customer);
-        bill.setDate(billDto.getDate());
-        bill.setProducts(billDto.getProducts());
 
-        // Need to find, can we compute these values at object creation
+        // Need to find, can we compute these values at object creation/ modifying values
         int billAmount = 0;
         for(Product product : bill.getProducts()) {
             int productAmount = 0;
@@ -64,19 +63,23 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public Bill updateBill(BillDto billDto) {
-
+        // To Do:
         // fetch the bill and store the old bill amount
         // after modification store the new bill amount
         // now modify the customer balance with the difference (new-old)
         // return billDto
 
+        Bill updatedBill = BillConverter.toBill(billDto);
         Bill bill = getBill(billDto.getBusinessName(), billDto.getDate());
-        if(bill == null) throw new RuntimeException("customer business name is invalid or there is no bill in the mentioned date");
+        if(bill == null) throw new IllegalArgumentException("customer business name is invalid or there is no bill in the mentioned date, please check and try again!");
 
-        bill.setProducts(billDto.getProducts());
-        bill.setAmount(bill.getAmount());
+        if(updatedBill.getId() == null) updatedBill.setId(bill.getId());
+        if(updatedBill.getCustomer() == null) updatedBill.setCustomer(bill.getCustomer());
+        if(updatedBill.getDate() == null) updatedBill.setDate(bill.getDate());
+        if(updatedBill.getAmount() == null) updatedBill.setAmount(bill.getAmount());
+        if(updatedBill.getProducts() == null) updatedBill.setProducts(bill.getProducts());
 
-        return billRepository.save(bill);
+        return billRepository.save(updatedBill);
     }
 
     @Override

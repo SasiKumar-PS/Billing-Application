@@ -2,6 +2,7 @@ package dev.sasikumar.billingapplication.controllers;
 
 import dev.sasikumar.billingapplication.DTOs.BillDto;
 import dev.sasikumar.billingapplication.DTOs.ProductDto;
+import dev.sasikumar.billingapplication.converter.BillConverter;
 import dev.sasikumar.billingapplication.models.Bill;
 import dev.sasikumar.billingapplication.services.BillService;
 import org.springframework.web.bind.annotation.*;
@@ -29,18 +30,20 @@ public class BillController {
 
         // fetch the bill and add the product in the List
         // just add the product amount to the customer balance
+
+        // Need to check, can we add product with billId without using JPARepo?
         return null;
     }
 
     @GetMapping("/{name}/{date}")
-    public Bill getBill (@PathVariable("name") String businessName,
+    public BillDto getBill (@PathVariable("name") String businessName,
                         @PathVariable("date") String date) {
 
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
-        return billService.getBill(businessName, localDate);
+        return BillConverter.toBillDto(billService.getBill(businessName, localDate));
     }
 
-    @PutMapping("/{name}/{date}")
+    @PutMapping("/")
     public Bill updateBill (@RequestBody BillDto billDto) {
 
         return billService.updateBill(billDto);

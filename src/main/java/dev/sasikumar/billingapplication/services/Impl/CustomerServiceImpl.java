@@ -1,6 +1,7 @@
 package dev.sasikumar.billingapplication.services.Impl;
 
 import dev.sasikumar.billingapplication.DTOs.CustomerDto;
+import dev.sasikumar.billingapplication.converter.CustomerConverter;
 import dev.sasikumar.billingapplication.models.Customer;
 import dev.sasikumar.billingapplication.repositorys.CustomerRepository;
 import dev.sasikumar.billingapplication.services.CustomerService;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
     public CustomerServiceImpl(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
@@ -17,13 +18,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer createCustomer(CustomerDto customerDto) {
-        Customer customer = new Customer();
-        customer.setBusinessName(customerDto.getBusinessName());
-        customer.setName(customer.getName());
-        customer.setPhoneNumber(customerDto.getPhoneNumber());
-        customer.setAddress(customerDto.getAddress());
-        customer.setBalance(customerDto.getBalance());
-
+        Customer customer = CustomerConverter.toCustomer(customerDto);
         return customerRepository.save(customer);
     }
 
@@ -34,11 +29,22 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer updateCustomer(CustomerDto customerDto) {
-        return null;
+        Customer updatedCustomer = CustomerConverter.toCustomer(customerDto);
+        Customer customer = getCustomer(customerDto.getBusinessName());
+        if(customer == null) throw new IllegalArgumentException("customer business name is invalid, please check and try again!");
+
+        if(updatedCustomer.getId() == null) updatedCustomer.setId(customer.getId());
+        if(updatedCustomer.getName() == null) updatedCustomer.setName(customer.getName());
+        if(updatedCustomer.getPhoneNumber() == null) updatedCustomer.setPhoneNumber(customer.getPhoneNumber());
+        if(updatedCustomer.getAddress() == null) updatedCustomer.setAddress(customer.getAddress());
+        if(updatedCustomer.getBalance() == null) updatedCustomer.setBalance(customer.getBalance());
+
+        return customerRepository.save(updatedCustomer);
     }
 
     @Override
     public String deleteCustomer(String businessName) {
-        return null;
+        customerRepository.deleteCustomerByBusinessName(businessName);
+        return "Customer " + businessName + " is deleted!";
     }
 }

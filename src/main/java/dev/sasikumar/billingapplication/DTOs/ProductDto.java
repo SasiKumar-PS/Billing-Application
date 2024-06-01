@@ -12,4 +12,5 @@ public class ProductDto {
     private int quantity;
     private Integer weight;
     private int price;
+    private int amount;
 }

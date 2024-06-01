@@ -1,6 +1,5 @@
 package dev.sasikumar.billingapplication.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,7 +25,6 @@ public class Bill {
     private LocalDate date;
     private Integer amount;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST})
-    @JsonIgnore
+    @ElementCollection
     private List<Product> products;
 }
