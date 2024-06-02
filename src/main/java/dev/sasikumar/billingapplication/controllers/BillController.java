@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @RestController
 @RequestMapping("/bill")
@@ -28,10 +29,8 @@ public class BillController {
     public Bill addProductInBill (@PathVariable("id") int id,
                                 @RequestBody ProductDto productDto) {
 
-        // fetch the bill and add the product in the List
-        // just add the product amount to the customer balance
-
-        // Need to check, can we add product with billId without using JPARepo?
+        // adding and removing product in a bill should be done via updateBill
+        // But we can add product directly to product bill using JdbcTemplate
         return null;
     }
 
@@ -55,5 +54,15 @@ public class BillController {
 
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
         return billService.deleteBill(businessName, localDate);
+    }
+
+    @GetMapping("/all")
+    public List<Bill> getAllBills() {
+        return billService.getAllBills();
+    }
+
+    @GetMapping("/{name}")
+    public List<Bill> getAllBillsByCustomer(@PathVariable("name") String businessName){
+        return billService.getAllBillsByCustomer(businessName);
     }
 }

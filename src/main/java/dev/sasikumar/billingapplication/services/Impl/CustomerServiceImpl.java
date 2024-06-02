@@ -7,6 +7,8 @@ import dev.sasikumar.billingapplication.repositorys.CustomerRepository;
 import dev.sasikumar.billingapplication.services.CustomerService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
@@ -46,5 +48,10 @@ public class CustomerServiceImpl implements CustomerService {
     public String deleteCustomer(String businessName) {
         customerRepository.deleteCustomerByBusinessName(businessName);
         return "Customer " + businessName + " is deleted!";
+    }
+
+    @Override
+    public List<Customer> getAllCustomers() {
+        return customerRepository.findAll();
     }
 }

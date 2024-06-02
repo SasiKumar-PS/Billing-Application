@@ -12,6 +12,11 @@ public class BillDto {
     private Integer billId;
     private String businessName;
     private LocalDate date;
-    private List<ProductDto> products;     // need to make List<ProductDto>
-    private int amount;
+    private List<ProductDto> products;
+    private double amount;
+
+    public void setProducts(List<ProductDto> products) {
+        this.products = products;
+        this.amount = products.stream().map(ProductDto::getAmount).reduce(0.0, (Double::sum));
+    }
 }

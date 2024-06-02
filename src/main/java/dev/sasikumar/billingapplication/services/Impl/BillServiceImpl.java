@@ -1,17 +1,16 @@
 package dev.sasikumar.billingapplication.services.Impl;
 
 import dev.sasikumar.billingapplication.DTOs.BillDto;
-import dev.sasikumar.billingapplication.Enums.ProductType;
 import dev.sasikumar.billingapplication.converter.BillConverter;
 import dev.sasikumar.billingapplication.models.Bill;
 import dev.sasikumar.billingapplication.models.Customer;
-import dev.sasikumar.billingapplication.models.Product;
 import dev.sasikumar.billingapplication.repositorys.BillRepository;
 import dev.sasikumar.billingapplication.services.BillService;
 import dev.sasikumar.billingapplication.services.CustomerService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class BillServiceImpl implements BillService {
@@ -30,25 +29,7 @@ public class BillServiceImpl implements BillService {
 
         Customer customer = customerService.getCustomer(billDto.getBusinessName());
         if(customer == null) throw new IllegalArgumentException("customer business name is invalid \n 1. please check the business name and try again! \n 2. Create a customer and then try saving the bill with this customer");
-
         bill.setCustomer(customer);
-
-        // Need to find, can we compute these values at object creation/ modifying values
-        int billAmount = 0;
-        for(Product product : bill.getProducts()) {
-            int productAmount = 0;
-
-            if(product.getProductType().equals(ProductType.BAG)){
-                productAmount = product.getQuantity() * product.getPrice();
-            }
-            else if(product.getProductType().equals(ProductType.WEIGHT)){
-                productAmount = product.getWeight() * product.getPrice();
-            }
-
-            product.setAmount(productAmount);
-            billAmount += productAmount;
-        }
-        bill.setAmount(billAmount);
 
         return billRepository.save(bill);
     }
@@ -76,7 +57,7 @@ public class BillServiceImpl implements BillService {
         if(updatedBill.getId() == null) updatedBill.setId(bill.getId());
         if(updatedBill.getCustomer() == null) updatedBill.setCustomer(bill.getCustomer());
         if(updatedBill.getDate() == null) updatedBill.setDate(bill.getDate());
-        if(updatedBill.getAmount() == null) updatedBill.setAmount(bill.getAmount());
+        if(updatedBill.getAmount() == 0) updatedBill.setAmount(bill.getAmount());
         if(updatedBill.getProducts() == null) updatedBill.setProducts(bill.getProducts());
 
         return billRepository.save(updatedBill);
@@ -91,5 +72,14 @@ public class BillServiceImpl implements BillService {
 
         billRepository.delete(businessName, date);
         return businessName + "'s bill at date " + date + " is deleted!";
+    }
+
+    public List<Bill> getAllBills() {
+        return billRepository.findAll();
+    }
+
+    @Override
+    public List<Bill> getAllBillsByCustomer(String businessName) {
+        return billRepository.getAllByCustomer_BusinessName(businessName);
     }
 }

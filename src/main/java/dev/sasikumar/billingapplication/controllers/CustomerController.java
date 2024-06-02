@@ -5,6 +5,8 @@ import dev.sasikumar.billingapplication.models.Customer;
 import dev.sasikumar.billingapplication.services.CustomerService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
@@ -32,5 +34,10 @@ public class CustomerController {
     @DeleteMapping("/{name}")
     public String deleteCustomer(@PathVariable("name") String businessName) {
         return customerService.deleteCustomer(businessName);
+    }
+
+    @GetMapping("/all")
+    public List<Customer> getAllCustomers() {
+        return customerService.getAllCustomers();
     }
 }

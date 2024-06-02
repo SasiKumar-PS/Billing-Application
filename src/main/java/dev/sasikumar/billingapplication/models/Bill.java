@@ -1,5 +1,6 @@
 package dev.sasikumar.billingapplication.models;
 
+import dev.sasikumar.billingapplication.DTOs.ProductDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,8 +24,13 @@ public class Bill {
     @ManyToOne
     private Customer customer;
     private LocalDate date;
-    private Integer amount;
+    private double amount;
 
     @ElementCollection
     private List<Product> products;
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+        this.amount = products.stream().map(Product::getAmount).reduce(0.0, (Double::sum));
+    }
 }
