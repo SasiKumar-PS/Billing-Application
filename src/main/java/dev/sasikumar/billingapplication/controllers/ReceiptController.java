@@ -1,6 +1,7 @@
 package dev.sasikumar.billingapplication.controllers;
 
 import dev.sasikumar.billingapplication.DTOs.ReceiptDto;
+import dev.sasikumar.billingapplication.converter.ReceiptConverter;
 import dev.sasikumar.billingapplication.models.Receipt;
 import dev.sasikumar.billingapplication.services.ReceiptService;
 import org.springframework.web.bind.annotation.*;
@@ -19,21 +20,21 @@ public class ReceiptController {
     }
 
     @PostMapping("/")
-    public Receipt createReceipt(@RequestBody ReceiptDto receiptDto) {
-        return receiptService.createReceipt(receiptDto);
+    public ReceiptDto createReceipt(@RequestBody ReceiptDto receiptDto) {
+        return ReceiptConverter.toReceiptDto(receiptService.createReceipt(receiptDto));
     }
 
     @GetMapping("/{name}/{date}")
-    public Receipt getReceipt(@PathVariable("name") String businessName,
+    public ReceiptDto getReceipt(@PathVariable("name") String businessName,
                                  @PathVariable("date") String date) {
 
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
-        return receiptService.getReceipt(businessName, localDate);
+        return ReceiptConverter.toReceiptDto(receiptService.getReceipt(businessName, localDate));
     }
 
     @PutMapping("/")
-    public Receipt updateReceipt(@RequestBody ReceiptDto receiptDto) {
-        return receiptService.updateReceipt(receiptDto);
+    public ReceiptDto updateReceipt(@RequestBody ReceiptDto receiptDto) {
+        return ReceiptConverter.toReceiptDto(receiptService.updateReceipt(receiptDto));
     }
 
     @DeleteMapping("/{name}/{date}")

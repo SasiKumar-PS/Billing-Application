@@ -1,6 +1,7 @@
 package dev.sasikumar.billingapplication.controllers;
 
 import dev.sasikumar.billingapplication.DTOs.CustomerDto;
+import dev.sasikumar.billingapplication.converter.CustomerConverter;
 import dev.sasikumar.billingapplication.models.Customer;
 import dev.sasikumar.billingapplication.services.CustomerService;
 import org.springframework.web.bind.annotation.*;
@@ -17,18 +18,18 @@ public class CustomerController {
         this.customerService = customerService;
     }
     @PostMapping("/")
-    public Customer createCustomer(@RequestBody CustomerDto createCustomerDto) {
-        return customerService.createCustomer(createCustomerDto);
+    public CustomerDto createCustomer(@RequestBody CustomerDto createCustomerDto) {
+        return CustomerConverter.toCustomerDto(customerService.createCustomer(createCustomerDto));
     }
 
     @GetMapping("/{name}")
-    public Customer getCustomer(@PathVariable("name") String businessName) {
-        return customerService.getCustomer(businessName);
+    public CustomerDto getCustomer(@PathVariable("name") String businessName) {
+        return CustomerConverter.toCustomerDto(customerService.getCustomer(businessName));
     }
 
     @PutMapping("/")
-    public Customer updateCustomer(@RequestBody CustomerDto customerDto) {
-        return customerService.updateCustomer(customerDto);
+    public CustomerDto updateCustomer(@RequestBody CustomerDto customerDto) {
+        return CustomerConverter.toCustomerDto(customerService.updateCustomer(customerDto));
     }
 
     @DeleteMapping("/{name}")
@@ -37,7 +38,7 @@ public class CustomerController {
     }
 
     @GetMapping("/all")
-    public List<Customer> getAllCustomers() {
-        return customerService.getAllCustomers();
+    public List<CustomerDto> getAllCustomers() {
+        return customerService.getAllCustomers().stream().map(CustomerConverter::toCustomerDto).toList();
     }
 }

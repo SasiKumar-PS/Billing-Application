@@ -21,8 +21,8 @@ public class BillController {
     }
 
     @PostMapping("/")
-    public Bill createBill(@RequestBody BillDto billDto) {
-        return billService.createBill(billDto);
+    public BillDto createBill(@RequestBody BillDto billDto) {
+        return BillConverter.toBillDto(billService.createBill(billDto));
     }
 
     @PostMapping("/addProduct/{id}")
@@ -43,9 +43,9 @@ public class BillController {
     }
 
     @PutMapping("/")
-    public Bill updateBill (@RequestBody BillDto billDto) {
+    public BillDto updateBill (@RequestBody BillDto billDto) {
 
-        return billService.updateBill(billDto);
+        return BillConverter.toBillDto(billService.updateBill(billDto));
     }
 
     @DeleteMapping("/{name}/{date}")
@@ -57,12 +57,12 @@ public class BillController {
     }
 
     @GetMapping("/all")
-    public List<Bill> getAllBills() {
-        return billService.getAllBills();
+    public List<BillDto> getAllBills() {
+        return billService.getAllBills().stream().map(BillConverter::toBillDto).toList();
     }
 
     @GetMapping("/{name}")
-    public List<Bill> getAllBillsByCustomer(@PathVariable("name") String businessName){
-        return billService.getAllBillsByCustomer(businessName);
+    public List<BillDto> getAllBillsByCustomer(@PathVariable("name") String businessName){
+        return billService.getAllBillsByCustomer(businessName).stream().map(BillConverter::toBillDto).toList();
     }
 }
