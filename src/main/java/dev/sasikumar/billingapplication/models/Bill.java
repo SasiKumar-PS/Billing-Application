@@ -1,6 +1,5 @@
 package dev.sasikumar.billingapplication.models;
 
-import dev.sasikumar.billingapplication.DTOs.ProductDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +17,7 @@ import java.util.List;
 @Table(name = "bills")
 public class Bill {
     @Id
-    @GeneratedValue(strategy =  GenerationType.AUTO)
+    @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Integer Id;
 
     @ManyToOne

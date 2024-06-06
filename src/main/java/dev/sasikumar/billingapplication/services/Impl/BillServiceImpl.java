@@ -8,6 +8,7 @@ import dev.sasikumar.billingapplication.repositorys.BillRepository;
 import dev.sasikumar.billingapplication.services.BillService;
 import dev.sasikumar.billingapplication.services.CustomerService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -30,29 +31,25 @@ public class BillServiceImpl implements BillService {
         Customer customer = customerService.getCustomer(billDto.getBusinessName());
         if(customer == null) throw new IllegalArgumentException("customer business name is invalid \n 1. please check the business name and try again! \n 2. Create a customer and then try saving the bill with this customer");
         bill.setCustomer(customer);
+        // Adding new bill amount to the customer total balance
+        customer.setBalance(customer.getBalance() + bill.getAmount());
 
         return billRepository.save(bill);
     }
 
     @Override
     public Bill getBill(String businessName, LocalDate date) {
-        // fetch bill with businessName and date
-        // just return the billDto
-        return billRepository.getBillByBusinessNameandByDate(businessName, date);
-        // need to check this!
+        return billRepository.getBillByBusinessNameAndByDate(businessName, date);
     }
 
     @Override
     public Bill updateBill(BillDto billDto) {
-        // To Do:
-        // fetch the bill and store the old bill amount
-        // after modification store the new bill amount
-        // now modify the customer balance with the difference (new-old)
-        // return billDto
 
         Bill updatedBill = BillConverter.toBill(billDto);
         Bill bill = getBill(billDto.getBusinessName(), billDto.getDate());
         if(bill == null) throw new IllegalArgumentException("customer business name is invalid or there is no bill in the mentioned date, please check and try again!");
+        double oldAmount = bill.getAmount();
+        double newAmount = updatedBill.getAmount();
 
         if(updatedBill.getId() == null) updatedBill.setId(bill.getId());
         if(updatedBill.getCustomer() == null) updatedBill.setCustomer(bill.getCustomer());
@@ -60,17 +57,21 @@ public class BillServiceImpl implements BillService {
         if(updatedBill.getAmount() == 0) updatedBill.setAmount(bill.getAmount());
         if(updatedBill.getProducts() == null) updatedBill.setProducts(bill.getProducts());
 
+        // updating the customer balance with difference of old and new bill amount
+        updatedBill.getCustomer().setBalance(updatedBill.getCustomer().getBalance() + newAmount - oldAmount);
+
         return billRepository.save(updatedBill);
     }
 
+    @Transactional
     @Override
     public String deleteBill(String businessName, LocalDate date) {
 
-        // before deleting the bill reduce the amount to the customer balance
-        // and delete the bill
-        // return bill date + bill amount + new balance of customer
+        Bill bill = getBill(businessName, date);
+        // Reducing bill amount to the customer total balance
+        bill.getCustomer().setBalance(bill.getCustomer().getBalance() - bill.getAmount());
 
-        billRepository.delete(businessName, date);
+        billRepository.deleteById(bill.getId());
         return businessName + "'s bill at date " + date + " is deleted!";
     }
 
@@ -81,5 +82,10 @@ public class BillServiceImpl implements BillService {
     @Override
     public List<Bill> getAllBillsByCustomer(String businessName) {
         return billRepository.getAllByCustomer_BusinessName(businessName);
+    }
+
+    @Override
+    public List<Bill> getAllBillsByDate(LocalDate date) {
+        return billRepository.getAllByDate(date);
     }
 }

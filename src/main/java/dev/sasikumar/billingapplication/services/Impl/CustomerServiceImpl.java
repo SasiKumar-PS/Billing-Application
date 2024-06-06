@@ -39,7 +39,7 @@ public class CustomerServiceImpl implements CustomerService {
         if(updatedCustomer.getName() == null) updatedCustomer.setName(customer.getName());
         if(updatedCustomer.getPhoneNumber() == null) updatedCustomer.setPhoneNumber(customer.getPhoneNumber());
         if(updatedCustomer.getAddress() == null) updatedCustomer.setAddress(customer.getAddress());
-        if(updatedCustomer.getBalance() == null) updatedCustomer.setBalance(customer.getBalance());
+        if(updatedCustomer.getBalance() == 0) updatedCustomer.setBalance(customer.getBalance());
 
         return customerRepository.save(updatedCustomer);
     }

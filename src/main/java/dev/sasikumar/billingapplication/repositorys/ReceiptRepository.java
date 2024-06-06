@@ -7,6 +7,4 @@ import java.time.LocalDate;
 
 public interface ReceiptRepository extends JpaRepository <Receipt, Integer> {
     Receipt getReceiptsByCustomer_BusinessNameAndDate(String businessName, LocalDate date);
-
-    void deleteReceiptByCustomer_BusinessNameAndDate(String businessName, LocalDate date);
 }

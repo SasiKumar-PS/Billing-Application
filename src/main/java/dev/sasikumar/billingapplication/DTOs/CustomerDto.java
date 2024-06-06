@@ -10,5 +10,5 @@ public class CustomerDto {
     private String businessName;
     private String phoneNumber;
     private String address;
-    private Integer balance;
+    private double balance;
 }

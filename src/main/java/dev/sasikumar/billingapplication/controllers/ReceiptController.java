@@ -2,7 +2,6 @@ package dev.sasikumar.billingapplication.controllers;
 
 import dev.sasikumar.billingapplication.DTOs.ReceiptDto;
 import dev.sasikumar.billingapplication.converter.ReceiptConverter;
-import dev.sasikumar.billingapplication.models.Receipt;
 import dev.sasikumar.billingapplication.services.ReceiptService;
 import org.springframework.web.bind.annotation.*;
 

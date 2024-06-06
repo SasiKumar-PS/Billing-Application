@@ -2,11 +2,9 @@ package dev.sasikumar.billingapplication.services;
 
 import dev.sasikumar.billingapplication.DTOs.BillDto;
 import dev.sasikumar.billingapplication.models.Bill;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 public interface BillService {
     Bill createBill(BillDto billDto);
@@ -15,4 +13,5 @@ public interface BillService {
     String deleteBill(String businessName, LocalDate date);
     List<Bill> getAllBills();
     List<Bill> getAllBillsByCustomer(String businessName);
+    List<Bill> getAllBillsByDate(LocalDate date);
 }

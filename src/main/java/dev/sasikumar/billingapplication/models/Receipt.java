@@ -16,12 +16,12 @@ import java.time.LocalDate;
 @Table(name = "receipts")
 public class Receipt {
     @Id
-    @GeneratedValue(strategy =  GenerationType.AUTO)
+    @GeneratedValue(strategy =  GenerationType.IDENTITY)
     private Integer Id;
 
     @ManyToOne
     private Customer customer;
     private LocalDate date;
     private Integer amount;
-    // private Integer discount;    while we shouldn't update the discount
+    // private Integer discount;    while update the receipt, we shouldn't update the discount
 }

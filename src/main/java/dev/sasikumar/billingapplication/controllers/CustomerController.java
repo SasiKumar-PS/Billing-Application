@@ -2,7 +2,6 @@ package dev.sasikumar.billingapplication.controllers;
 
 import dev.sasikumar.billingapplication.DTOs.CustomerDto;
 import dev.sasikumar.billingapplication.converter.CustomerConverter;
-import dev.sasikumar.billingapplication.models.Customer;
 import dev.sasikumar.billingapplication.services.CustomerService;
 import org.springframework.web.bind.annotation.*;
 

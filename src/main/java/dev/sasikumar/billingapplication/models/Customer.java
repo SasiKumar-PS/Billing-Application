@@ -14,12 +14,12 @@ import lombok.Setter;
 @Table(name = "customers")
 public class Customer {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     private String name;
     private String businessName;
     private String phoneNumber;
     private String address;
-    private Integer balance;
+    private double balance;
 }

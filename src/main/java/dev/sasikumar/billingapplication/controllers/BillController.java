@@ -30,7 +30,7 @@ public class BillController {
                                 @RequestBody ProductDto productDto) {
 
         // adding and removing product in a bill should be done via updateBill
-        // But we can add product directly to product bill using JdbcTemplate
+        // But we can add product directly to product bill using JdbcTemplate, But not recommended
         return null;
     }
 
@@ -61,8 +61,14 @@ public class BillController {
         return billService.getAllBills().stream().map(BillConverter::toBillDto).toList();
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/name/{name}")
     public List<BillDto> getAllBillsByCustomer(@PathVariable("name") String businessName){
         return billService.getAllBillsByCustomer(businessName).stream().map(BillConverter::toBillDto).toList();
+    }
+
+    @GetMapping("/date/{date}")
+    public List<BillDto> getAllBillsByDate(@PathVariable("date") String date) {
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
+        return billService.getAllBillsByDate(localDate).stream().map(BillConverter::toBillDto).toList();
     }
 }
