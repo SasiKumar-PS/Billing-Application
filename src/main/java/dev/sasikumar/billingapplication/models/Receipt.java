@@ -22,6 +22,7 @@ public class Receipt {
     @ManyToOne
     private Customer customer;
     private LocalDate date;
-    private Integer amount;
-    // private Integer discount;    while update the receipt, we shouldn't update the discount
+    private double amount;
+    private double discount;    // on update the receipt, we shouldn't update the discount
+    private double totalAmount = amount + discount;
 }

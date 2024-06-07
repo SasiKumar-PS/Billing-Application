@@ -1,6 +1,5 @@
 package dev.sasikumar.billingapplication.repositorys;
 
-import dev.sasikumar.billingapplication.DTOs.BillDto;
 import dev.sasikumar.billingapplication.models.Bill;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

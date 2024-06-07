@@ -1,9 +1,7 @@
 package dev.sasikumar.billingapplication.controllers;
 
 import dev.sasikumar.billingapplication.DTOs.BillDto;
-import dev.sasikumar.billingapplication.DTOs.ProductDto;
 import dev.sasikumar.billingapplication.converter.BillConverter;
-import dev.sasikumar.billingapplication.models.Bill;
 import dev.sasikumar.billingapplication.services.BillService;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,15 +21,6 @@ public class BillController {
     @PostMapping("/")
     public BillDto createBill(@RequestBody BillDto billDto) {
         return BillConverter.toBillDto(billService.createBill(billDto));
-    }
-
-    @PostMapping("/addProduct/{id}")
-    public Bill addProductInBill (@PathVariable("id") int id,
-                                @RequestBody ProductDto productDto) {
-
-        // adding and removing product in a bill should be done via updateBill
-        // But we can add product directly to product bill using JdbcTemplate, But not recommended
-        return null;
     }
 
     @GetMapping("/{name}/{date}")
@@ -58,17 +47,17 @@ public class BillController {
 
     @GetMapping("/all")
     public List<BillDto> getAllBills() {
-        return billService.getAllBills().stream().map(BillConverter::toBillDto).toList();
+        return BillConverter.toBillDtoList(billService.getAllBills());
     }
 
     @GetMapping("/name/{name}")
     public List<BillDto> getAllBillsByCustomer(@PathVariable("name") String businessName){
-        return billService.getAllBillsByCustomer(businessName).stream().map(BillConverter::toBillDto).toList();
+        return BillConverter.toBillDtoList(billService.getAllBillsByCustomer(businessName));
     }
 
     @GetMapping("/date/{date}")
     public List<BillDto> getAllBillsByDate(@PathVariable("date") String date) {
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
-        return billService.getAllBillsByDate(localDate).stream().map(BillConverter::toBillDto).toList();
+        return BillConverter.toBillDtoList(billService.getAllBillsByDate(localDate));
     }
 }

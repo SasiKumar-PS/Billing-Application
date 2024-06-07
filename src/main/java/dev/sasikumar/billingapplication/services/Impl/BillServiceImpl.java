@@ -46,17 +46,13 @@ public class BillServiceImpl implements BillService {
     public Bill updateBill(BillDto billDto) {
 
         Bill updatedBill = BillConverter.toBill(billDto);
-        Bill bill = getBill(billDto.getBusinessName(), billDto.getDate());
-        if(bill == null) throw new IllegalArgumentException("customer business name is invalid or there is no bill in the mentioned date, please check and try again!");
-        double oldAmount = bill.getAmount();
+        Bill billFromDB = getBill(billDto.getBusinessName(), billDto.getDate());
+        if(billFromDB == null) throw new IllegalArgumentException("customer business name is invalid or there is no bill in the mentioned date, please check and try again!");
+        // updates non-changing values
+        BillConverter.updateValues(updatedBill, billFromDB);
+
+        double oldAmount = billFromDB.getAmount();
         double newAmount = updatedBill.getAmount();
-
-        if(updatedBill.getId() == null) updatedBill.setId(bill.getId());
-        if(updatedBill.getCustomer() == null) updatedBill.setCustomer(bill.getCustomer());
-        if(updatedBill.getDate() == null) updatedBill.setDate(bill.getDate());
-        if(updatedBill.getAmount() == 0) updatedBill.setAmount(bill.getAmount());
-        if(updatedBill.getProducts() == null) updatedBill.setProducts(bill.getProducts());
-
         // updating the customer balance with difference of old and new bill amount
         updatedBill.getCustomer().setBalance(updatedBill.getCustomer().getBalance() + newAmount - oldAmount);
 

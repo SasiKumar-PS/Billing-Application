@@ -16,20 +16,17 @@ public class ProductDto {
 
     public void setPrice(double price) {
         this.price = price;
-        amount = (productType.equals(ProductType.BAG)) ?
-                quantity * price : weight * price;
+        amount = (productType.equals(ProductType.BAG)) ? quantity * price : weight * price;
     }
 
     public void setQuantity(double quantity) {
         this.quantity = quantity;
-        amount = (productType.equals(ProductType.BAG)) ?
-                quantity * price : weight * price;
+        amount = (productType.equals(ProductType.BAG)) ? quantity * price : weight * price;
     }
 
     public void setWeight(double weight) {
         this.weight = weight;
-        amount = (productType.equals(ProductType.BAG)) ?
-                quantity * price : weight * price;
+        amount = (productType.equals(ProductType.BAG)) ? quantity * price : weight * price;
     }
 
     public void setProductType (ProductType productType) {

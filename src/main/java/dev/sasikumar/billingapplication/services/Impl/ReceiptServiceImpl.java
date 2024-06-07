@@ -24,14 +24,13 @@ public class ReceiptServiceImpl implements ReceiptService {
 
     @Override
     public Receipt createReceipt(ReceiptDto receiptDto) {
-        
-        // Need to implement business logic 
+
         Receipt receipt = ReceiptConverter.toReceipt(receiptDto);
         Customer customer = customerService.getCustomer(receiptDto.getBusinessName());
         if(customer == null) throw new IllegalArgumentException("customer business name is invalid \n 1. please check the business name and try again! \n 2. Create a customer and then try saving the receipt with this customer");
         receipt.setCustomer(customer);
         // reduce the customer balance by their receipt amount
-        customer.setBalance(customer.getBalance() - receipt.getAmount());
+        customer.setBalance(customer.getBalance() - receipt.getTotalAmount());
 
         return receiptRepository.save(receipt);
     }
@@ -44,16 +43,13 @@ public class ReceiptServiceImpl implements ReceiptService {
     @Override
     public Receipt updateReceipt(ReceiptDto receiptDto) {
         Receipt updatedReceipt = ReceiptConverter.toReceipt(receiptDto);
-        Receipt receipt = getReceipt(receiptDto.getBusinessName(), receiptDto.getDate());
-        if(receipt == null) throw new IllegalArgumentException("customer business name is invalid or there is no Receipt in the mentioned date, please check and try again!");
-        double oldReceipt = receipt.getAmount();
-        double newReceipt = updatedReceipt.getAmount();
+        Receipt receiptFromDB = getReceipt(receiptDto.getBusinessName(), receiptDto.getDate());
+        if(receiptFromDB == null) throw new IllegalArgumentException("customer business name is invalid or there is no Receipt in the mentioned date, please check and try again!");
+        // updates non-changing values
+        ReceiptConverter.updateValues(updatedReceipt, receiptFromDB);
 
-        if(updatedReceipt.getId() == null) updatedReceipt.setId(receipt.getId());
-        if(updatedReceipt.getCustomer() == null) updatedReceipt.setCustomer(receipt.getCustomer());
-        if(updatedReceipt.getDate() == null) updatedReceipt.setDate(receipt.getDate());
-        if(updatedReceipt.getAmount() == null) updatedReceipt.setAmount(receipt.getAmount());
-
+        double oldReceipt = receiptFromDB.getTotalAmount();
+        double newReceipt = updatedReceipt.getTotalAmount();
         // updating the customer balance with their new receipt amount while adding the old receipt amount
         updatedReceipt.getCustomer().setBalance(updatedReceipt.getCustomer().getBalance() - newReceipt + oldReceipt);
 
@@ -64,7 +60,7 @@ public class ReceiptServiceImpl implements ReceiptService {
     public String deleteReceipt(String businessName, LocalDate date) {
         Receipt receipt = getReceipt(businessName, date);
         // adding the receipt amount to the customer balance
-        receipt.getCustomer().setBalance(receipt.getCustomer().getBalance() + receipt.getAmount());
+        receipt.getCustomer().setBalance(receipt.getCustomer().getBalance() + receipt.getTotalAmount());
 
         receiptRepository.deleteById(receipt.getId());
         return "receipt of " + businessName + " at " + date + " is deleted!";

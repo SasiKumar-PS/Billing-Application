@@ -26,4 +26,12 @@ public class ReceiptConverter {
 
         return receiptDto;
     }
+    
+    public static void updateValues(Receipt updatedReceipt, Receipt receiptFromDB) {
+        if(updatedReceipt.getId() == null) updatedReceipt.setId(receiptFromDB.getId());
+        if(updatedReceipt.getCustomer() == null) updatedReceipt.setCustomer(receiptFromDB.getCustomer());
+        if(updatedReceipt.getDate() == null) updatedReceipt.setDate(receiptFromDB.getDate());
+        if(updatedReceipt.getAmount() == 0) updatedReceipt.setAmount(receiptFromDB.getAmount());
+        // discount shouldn't copy from the old receipt
+    }
 }

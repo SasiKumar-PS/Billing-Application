@@ -12,5 +12,7 @@ public class ReceiptDto {
     private Integer id;
     private String businessName;
     private LocalDate date;
-    private Integer amount;
+    private double amount;
+    private double discount;
+    private double totalAmount = amount + discount;
 }

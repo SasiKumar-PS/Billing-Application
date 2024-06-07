@@ -38,6 +38,6 @@ public class CustomerController {
 
     @GetMapping("/all")
     public List<CustomerDto> getAllCustomers() {
-        return customerService.getAllCustomers().stream().map(CustomerConverter::toCustomerDto).toList();
+        return CustomerConverter.toCustomerDtoList(customerService.getAllCustomers());
     }
 }

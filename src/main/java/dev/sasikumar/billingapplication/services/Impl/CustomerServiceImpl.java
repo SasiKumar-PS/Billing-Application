@@ -32,14 +32,10 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer updateCustomer(CustomerDto customerDto) {
         Customer updatedCustomer = CustomerConverter.toCustomer(customerDto);
-        Customer customer = getCustomer(customerDto.getBusinessName());
-        if(customer == null) throw new IllegalArgumentException("customer business name is invalid, please check and try again!");
+        Customer customerFromDB = getCustomer(customerDto.getBusinessName());
+        if(customerFromDB == null) throw new IllegalArgumentException("customer business name is invalid, please check and try again!");
 
-        if(updatedCustomer.getId() == null) updatedCustomer.setId(customer.getId());
-        if(updatedCustomer.getName() == null) updatedCustomer.setName(customer.getName());
-        if(updatedCustomer.getPhoneNumber() == null) updatedCustomer.setPhoneNumber(customer.getPhoneNumber());
-        if(updatedCustomer.getAddress() == null) updatedCustomer.setAddress(customer.getAddress());
-        if(updatedCustomer.getBalance() == 0) updatedCustomer.setBalance(customer.getBalance());
+        CustomerConverter.updateValues(updatedCustomer, customerFromDB);
 
         return customerRepository.save(updatedCustomer);
     }

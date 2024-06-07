@@ -35,22 +35,10 @@ public class ProductConverter {
     }
 
     public static List<Product> toProductList(List<ProductDto> productDtos) {
-        List<Product> products = new ArrayList<>();
-
-        for(ProductDto productDto : productDtos) {
-            products.add(toProduct(productDto));
-        }
-
-        return products;
+        return productDtos.stream().map(ProductConverter::toProduct).toList();
     }
 
     public static List<ProductDto> toProductDtoList(List<Product> products) {
-        List<ProductDto> productDtos = new ArrayList<>();
-
-        for(Product product : products) {
-            productDtos.add(toProductDto(product));
-        }
-
-        return productDtos;
+        return products.stream().map(ProductConverter::toProductDto).toList();
     }
 }
