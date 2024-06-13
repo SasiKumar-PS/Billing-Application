@@ -10,6 +10,7 @@ import dev.sasikumar.billingapplication.services.ReceiptService;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class ReceiptServiceImpl implements ReceiptService {
@@ -64,5 +65,10 @@ public class ReceiptServiceImpl implements ReceiptService {
 
         receiptRepository.deleteById(receipt.getId());
         return "receipt of " + businessName + " at " + date + " is deleted!";
+    }
+
+    @Override
+    public List<Receipt> getAllReceiptByDate(LocalDate date) {
+        return receiptRepository.getAllByDate(date);
     }
 }

@@ -60,4 +60,13 @@ public class BillController {
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
         return BillConverter.toBillDtoList(billService.getAllBillsByDate(localDate));
     }
+
+    @GetMapping("/from/{fromDate}/to/{toDate}")
+    public List<BillDto> getBillsFromRange(@PathVariable("fromDate") String fromDate,
+                                           @PathVariable("toDate") String toDate) {
+        LocalDate localDateFrom = LocalDate.parse(fromDate, DateTimeFormatter.ISO_LOCAL_DATE);
+        LocalDate localDateTo = LocalDate.parse(toDate, DateTimeFormatter.ISO_LOCAL_DATE);
+
+        return BillConverter.toBillDtoList(billService.getBillsFromRange(localDateFrom, localDateTo));
+    }
 }

@@ -3,6 +3,8 @@ package dev.sasikumar.billingapplication.converter;
 import dev.sasikumar.billingapplication.DTOs.ReceiptDto;
 import dev.sasikumar.billingapplication.models.Receipt;
 
+import java.util.List;
+
 public class ReceiptConverter {
 
     public static Receipt toReceipt(ReceiptDto receiptDto) {
@@ -25,6 +27,10 @@ public class ReceiptConverter {
         receiptDto.setAmount(receipt.getAmount());
 
         return receiptDto;
+    }
+
+    public static List<ReceiptDto> toReceiptDtoList(List<Receipt> receipts) {
+        return receipts.stream().map(ReceiptConverter::toReceiptDto).toList();
     }
     
     public static void updateValues(Receipt updatedReceipt, Receipt receiptFromDB) {

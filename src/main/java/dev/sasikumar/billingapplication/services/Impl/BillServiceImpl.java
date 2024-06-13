@@ -84,4 +84,9 @@ public class BillServiceImpl implements BillService {
     public List<Bill> getAllBillsByDate(LocalDate date) {
         return billRepository.getAllByDate(date);
     }
+
+    @Override
+    public List<Bill> getBillsFromRange(LocalDate fromDate, LocalDate toDate) {
+        return billRepository.getBillsByDateGreaterThanEqualAndDateLessThanEqual(fromDate, toDate);
+    }
 }

@@ -13,5 +13,6 @@ public interface BillRepository extends JpaRepository <Bill, Integer> {
     Bill getBillByBusinessNameAndByDate(String businessName, LocalDate date);
     List<Bill> getAllByCustomer_BusinessName(String businessName);
     List<Bill> getAllByDate(LocalDate date);
+    List<Bill> getBillsByDateGreaterThanEqualAndDateLessThanEqual(LocalDate fromDate, LocalDate toDate);
 }
 

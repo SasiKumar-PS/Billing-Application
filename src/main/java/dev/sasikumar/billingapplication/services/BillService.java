@@ -14,4 +14,5 @@ public interface BillService {
     List<Bill> getAllBills();
     List<Bill> getAllBillsByCustomer(String businessName);
     List<Bill> getAllBillsByDate(LocalDate date);
+    public List<Bill> getBillsFromRange(LocalDate fromDate, LocalDate toDate);
 }

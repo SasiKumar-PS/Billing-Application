@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @RestController
 @RequestMapping("/receipt")
@@ -42,5 +43,11 @@ public class ReceiptController {
 
         LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
         return receiptService.deleteReceipt(businessName, localDate);
+    }
+
+    @GetMapping("/date/{date}")
+    public List<ReceiptDto> getAllByDate(@PathVariable("date") String date) {
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ISO_LOCAL_DATE);
+        return ReceiptConverter.toReceiptDtoList(receiptService.getAllReceiptByDate(localDate));
     }
 }
